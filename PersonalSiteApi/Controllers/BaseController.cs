@@ -9,11 +9,13 @@ namespace PersonalSiteApi.Controllers
     {
         public readonly IConfiguration _config;
         public readonly PersonalSiteContext _context;
+        public readonly IWebHostEnvironment _environment;
         public string _language = "";
-        public BaseController(IConfiguration config, PersonalSiteContext context)
+        public BaseController(IConfiguration config, PersonalSiteContext context, IWebHostEnvironment hostingEnvironment)
         {
             _config = config;
             _context = context;
+            _environment = hostingEnvironment;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +18,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PersonalSiteContext>();
 var test = builder.Configuration.GetValue<string>("JwtSettings:Issuer");
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueCountLimit = 1024; //default 1024
+    options.ValueLengthLimit = int.MaxValue; //not recommended value
+    options.MultipartBodyLengthLimit = long.MaxValue; //not recommended value
+    options.MemoryBufferThreshold = Int32.MaxValue;
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
         options =>

@@ -12,6 +12,7 @@ namespace PersonalSiteApi.EntityFramework.Classes
         public PageContentType Type { get; set; }
         [StringLength(int.MaxValue)]
         public string? Content { get; set; }
+        public int? Order { get; set; }
     }
 
     public enum PageContentType

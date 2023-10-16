@@ -398,3 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 PersonalSiteApi/appsettings.Development.json
 PersonalSiteApi/appsettings.json
+PersonalSiteApi/uploads

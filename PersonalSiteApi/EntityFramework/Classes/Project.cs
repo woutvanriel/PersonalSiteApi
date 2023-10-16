@@ -14,5 +14,6 @@ namespace PersonalSiteApi.EntityFramework.Classes
         public ICollection<ProjectDetailsDB>? Details { get; set; }
         public string? Image { get; set; }
         public string? Slug { get; set; }
+        public int? Order { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace PersonalSiteApi.Controllers
     [ApiController]
     public class AuthController : BaseController
     {
-        public AuthController(IConfiguration config, PersonalSiteContext context) : base(config, context) { }
+        public AuthController(IConfiguration config, PersonalSiteContext context, IWebHostEnvironment webHostEnvironment) : base(config, context, webHostEnvironment) { }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -41,7 +41,7 @@ namespace PersonalSiteApi.Controllers
             var token = new JwtSecurityToken(_config.GetValue<string>("JwtSettings:Issuer"),
                 null,
                 null,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddDays(5),
                 signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

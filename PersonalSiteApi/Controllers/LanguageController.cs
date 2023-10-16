@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PersonalSiteApi.EntityFramework.Classes;
 using PersonalSiteApi.EntityFramework;
 using PersonalSiteApi.Models;
+using System.Net;
 
 namespace PersonalSiteApi.Controllers
 {
@@ -10,7 +11,7 @@ namespace PersonalSiteApi.Controllers
     [ApiController]
     public class LanguageController : BaseController
     {
-        public LanguageController(IConfiguration config, PersonalSiteContext context) : base(config, context) { } 
+        public LanguageController(IConfiguration config, PersonalSiteContext context, IWebHostEnvironment webHostEnvironment) : base(config, context, webHostEnvironment) { }
 
         [HttpGet]
         [Route("{page}")]
@@ -18,6 +19,13 @@ namespace PersonalSiteApi.Controllers
         public IActionResult GetLanguages(int page)
         {
             return Ok(_context.Languages.Skip(page * 20).Take(20).ToList());
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        public IActionResult CountLanguages()
+        {
+            return Ok(_context.Languages.Count());
         }
 
         [HttpGet]
@@ -32,16 +40,51 @@ namespace PersonalSiteApi.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UploadImage()
+        {
+            if (Request.ContentType == null || Request.ContentType.Split(";")[0] != "multipart/form-data") return StatusCode((int)HttpStatusCode.UnsupportedMediaType);
+            if (Request.Form.Files.Count < 1) return BadRequest("No files found.");
+            if (Request.Form["id"].Count == 0) return BadRequest("No id given.");
+
+            var id = new Guid(Request.Form["id"].ToString());
+            var language = _context.Languages.FirstOrDefault(x => x.Id == id);
+            if (language == null) return NotFound("No Language found");
+
+            IFormFile file = Request.Form.Files.First();
+            string location = await Utility.UploadFile(file, "flag", _environment);
+
+            language.Flag = location;
+            _context.SaveChanges();
+
+            return Ok(location);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteImage(Guid id) {
+            var language = _context.Languages.FirstOrDefault(x => x.Id == id);
+            if (language == null) return NotFound("No Language found");
+            language.Flag = null;
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult AddLanguage(Language Language)
         {
-            _context.Languages.Add(new LanguageDB
+            LanguageDB db = new LanguageDB
             {
                 Name = Language.Name
-            });
+            };
+            _context.Languages.Add(db);
             _context.SaveChanges();
-            return Ok();
+            return Ok(db.Id);
         }
 
         [HttpPatch]

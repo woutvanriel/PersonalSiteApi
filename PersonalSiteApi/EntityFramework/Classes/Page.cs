@@ -12,5 +12,6 @@ namespace PersonalSiteApi.EntityFramework.Classes
         public Guid Id { get; set; }
         public ICollection<PageDetailDB>? Details { get; }
         public string? Slug { get; set; }
+        public int? Order { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace PersonalSiteApi.Controllers
     [ApiController]
     public class ProjectController : BaseController
     {
-        public ProjectController(IConfiguration config, PersonalSiteContext context) : base(config, context) { }
+        public ProjectController(IConfiguration config, PersonalSiteContext context, IWebHostEnvironment webHostEnvironment) : base(config, context, webHostEnvironment) { }
 
         [HttpGet]
         [Route("{page}")]
