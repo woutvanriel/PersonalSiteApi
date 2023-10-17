@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalSiteApi.EntityFramework;
 
@@ -11,9 +12,11 @@ using PersonalSiteApi.EntityFramework;
 namespace PersonalSiteApi.Migrations
 {
     [DbContext(typeof(PersonalSiteContext))]
-    partial class PersonalSiteContextModelSnapshot : ModelSnapshot
+    [Migration("20231017123046_Fix-Images")]
+    partial class FixImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,12 +77,17 @@ namespace PersonalSiteApi.Migrations
                     b.Property<int?>("Order")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("ProjectDetailsDBId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DetailsId");
+
+                    b.HasIndex("ProjectDetailsDBId");
 
                     b.ToTable("PageContent");
                 });
@@ -110,9 +118,6 @@ namespace PersonalSiteApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("LanguageId")
                         .HasColumnType("uniqueidentifier");
@@ -190,9 +195,6 @@ namespace PersonalSiteApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("LanguageId")
                         .HasColumnType("uniqueidentifier");
 
@@ -208,7 +210,7 @@ namespace PersonalSiteApi.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectDetails");
+                    b.ToTable("ProjectDetailsDB");
                 });
 
             modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.ImageDB", b =>
@@ -223,6 +225,10 @@ namespace PersonalSiteApi.Migrations
                     b.HasOne("PersonalSiteApi.EntityFramework.Classes.PageDetailDB", "Details")
                         .WithMany("Content")
                         .HasForeignKey("DetailsId");
+
+                    b.HasOne("PersonalSiteApi.EntityFramework.Classes.ProjectDetailsDB", null)
+                        .WithMany("Content")
+                        .HasForeignKey("ProjectDetailsDBId");
 
                     b.Navigation("Details");
                 });
@@ -245,7 +251,7 @@ namespace PersonalSiteApi.Migrations
             modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.ProjectContentDB", b =>
                 {
                     b.HasOne("PersonalSiteApi.EntityFramework.Classes.ProjectDetailsDB", "Details")
-                        .WithMany("Content")
+                        .WithMany()
                         .HasForeignKey("DetailsId");
 
                     b.HasOne("PersonalSiteApi.EntityFramework.Classes.ProjectDB", null)

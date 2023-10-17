@@ -4,6 +4,7 @@ using PersonalSiteApi.EntityFramework.Classes;
 using PersonalSiteApi.EntityFramework;
 using PersonalSiteApi.Models;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PersonalSiteApi.Controllers
 {
@@ -22,6 +23,7 @@ namespace PersonalSiteApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         public IActionResult CountLanguages()
         {
@@ -40,6 +42,7 @@ namespace PersonalSiteApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadImage()
@@ -62,6 +65,7 @@ namespace PersonalSiteApi.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,6 +78,7 @@ namespace PersonalSiteApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult AddLanguage(Language Language)
@@ -88,6 +93,7 @@ namespace PersonalSiteApi.Controllers
         }
 
         [HttpPatch]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -102,6 +108,7 @@ namespace PersonalSiteApi.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

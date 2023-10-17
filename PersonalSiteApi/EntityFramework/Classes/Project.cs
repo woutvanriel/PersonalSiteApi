@@ -12,7 +12,7 @@ namespace PersonalSiteApi.EntityFramework.Classes
         public Guid Id { get; set; }
         public ICollection<ProjectContentDB>? Content { get; set; }
         public ICollection<ProjectDetailsDB>? Details { get; set; }
-        public string? Image { get; set; }
+        public ICollection<ImageDB>? Images { get; set; }
         public string? Slug { get; set; }
         public int? Order { get; set; }
     }

@@ -10,7 +10,8 @@ namespace PersonalSiteApi.EntityFramework.Classes
         public Guid Id { get; set; }
         public ProjectDB? Project { get; set; }
         public LanguageDB? Language { get; set; }
-        public ICollection<PageContentDB>? Content { get; set; }
+        public ICollection<ProjectContentDB>? Content { get; set; }
         public string? Title { get; set; }
+        public string? Description { get; set; }
     }
 }

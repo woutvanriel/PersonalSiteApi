@@ -12,6 +12,8 @@ namespace PersonalSiteApi.EntityFramework
         public DbSet<PageDetailDB> PageDetails { get; set; }
         public DbSet<ProjectDB> Projects { get; set; }
         public DbSet<ProjectContentDB> ProjectContent { get; set; }
+        public DbSet<ProjectDetailsDB> ProjectDetails { get; set; }
+        public DbSet<ImageDB> Images { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
