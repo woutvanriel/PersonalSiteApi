@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PersonalSiteApi.EntityFramework.Classes
 {
-    public class PageDetailDB
+    public class PageDetailsDB
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]

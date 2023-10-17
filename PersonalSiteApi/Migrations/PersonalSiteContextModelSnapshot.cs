@@ -105,7 +105,7 @@ namespace PersonalSiteApi.Migrations
                     b.ToTable("Pages");
                 });
 
-            modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.PageDetailDB", b =>
+            modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.PageDetailsDB", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -220,14 +220,14 @@ namespace PersonalSiteApi.Migrations
 
             modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.PageContentDB", b =>
                 {
-                    b.HasOne("PersonalSiteApi.EntityFramework.Classes.PageDetailDB", "Details")
+                    b.HasOne("PersonalSiteApi.EntityFramework.Classes.PageDetailsDB", "Details")
                         .WithMany("Content")
                         .HasForeignKey("DetailsId");
 
                     b.Navigation("Details");
                 });
 
-            modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.PageDetailDB", b =>
+            modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.PageDetailsDB", b =>
                 {
                     b.HasOne("PersonalSiteApi.EntityFramework.Classes.LanguageDB", "Language")
                         .WithMany()
@@ -275,7 +275,7 @@ namespace PersonalSiteApi.Migrations
                     b.Navigation("Details");
                 });
 
-            modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.PageDetailDB", b =>
+            modelBuilder.Entity("PersonalSiteApi.EntityFramework.Classes.PageDetailsDB", b =>
                 {
                     b.Navigation("Content");
                 });

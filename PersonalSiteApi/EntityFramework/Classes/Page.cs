@@ -10,7 +10,7 @@ namespace PersonalSiteApi.EntityFramework.Classes
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
-        public ICollection<PageDetailDB>? Details { get; }
+        public ICollection<PageDetailsDB>? Details { get; }
         public string? Slug { get; set; }
         public int? Order { get; set; }
     }

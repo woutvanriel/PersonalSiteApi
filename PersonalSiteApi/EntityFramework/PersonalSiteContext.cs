@@ -9,7 +9,7 @@ namespace PersonalSiteApi.EntityFramework
         public DbSet<LanguageDB> Languages { get; set; }
         public DbSet<PageDB> Pages { get; set; }
         public DbSet<PageContentDB> PageContent { get; set; }
-        public DbSet<PageDetailDB> PageDetails { get; set; }
+        public DbSet<PageDetailsDB> PageDetails { get; set; }
         public DbSet<ProjectDB> Projects { get; set; }
         public DbSet<ProjectContentDB> ProjectContent { get; set; }
         public DbSet<ProjectDetailsDB> ProjectDetails { get; set; }

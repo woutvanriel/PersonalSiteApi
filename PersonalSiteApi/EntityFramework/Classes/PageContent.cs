@@ -8,7 +8,7 @@ namespace PersonalSiteApi.EntityFramework.Classes
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
-        public PageDetailDB? Details { get; set; }
+        public PageDetailsDB? Details { get; set; }
         public PageContentType Type { get; set; }
         [StringLength(int.MaxValue)]
         public string? Content { get; set; }

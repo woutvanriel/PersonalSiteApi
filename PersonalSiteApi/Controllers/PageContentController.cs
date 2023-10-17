@@ -11,18 +11,18 @@ namespace PersonalSiteApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ProjectContentController : BaseController
+    public class PageContentController : BaseController
     {
-        public ProjectContentController(IConfiguration config, PersonalSiteContext context, IWebHostEnvironment webHostEnvironment) : base(config, context, webHostEnvironment) { }
+        public PageContentController(IConfiguration config, PersonalSiteContext context, IWebHostEnvironment webHostEnvironment) : base(config, context, webHostEnvironment) { }
 
         [HttpGet]
         [Route("{detailid}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProjectContentDB>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PageContentDB>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetAllContent(Guid detailid)
         {
-            var detail = _context.ProjectDetails.Include(x => x.Content).FirstOrDefault(x => x.Id == detailid);
+            var detail = _context.PageDetails.Include(x => x.Content).FirstOrDefault(x => x.Id == detailid);
             if (detail == null) return NotFound("No Detail found.");
             return Ok(detail.Content!.OrderBy(x => x.Order));
         }
@@ -30,11 +30,11 @@ namespace PersonalSiteApi.Controllers
         [HttpGet]
         [Route("{id}")]
         [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProjectContentDB))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PageContentDB))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetContent(Guid id)
         {
-            var content = _context.ProjectContent.FirstOrDefault(x => x.Id == id);
+            var content = _context.PageContent.FirstOrDefault(x => x.Id == id);
             if (content == null) return NotFound("No Content found.");
             return Ok(content);
         }
@@ -43,11 +43,11 @@ namespace PersonalSiteApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult AddContent(ProjectContent content)
+        public IActionResult AddContent(PageContent content)
         {
-            var detail = _context.ProjectDetails.Include(x => x.Content).FirstOrDefault(x => x.Id == content.DetailId);
+            var detail = _context.PageDetails.Include(x => x.Content).FirstOrDefault(x => x.Id == content.DetailId);
             if (detail == null) return NotFound("No Detail found.");
-            var db = new ProjectContentDB()
+            var db = new PageContentDB()
             {
                 Details = detail,
                 Type = content.Type,
@@ -63,9 +63,9 @@ namespace PersonalSiteApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult EditContent(ProjectContent content)
+        public IActionResult EditContent(PageContent content)
         {
-            var db = _context.ProjectContent.FirstOrDefault(x => x.Id == content.Id);
+            var db = _context.PageContent.FirstOrDefault(x => x.Id == content.Id);
             if (db == null) return NotFound("No Content found.");
             if (db.Type != content.Type) db.Type = content.Type;
             if (db.Content != content.Content) db.Content = content.Content;
@@ -79,12 +79,12 @@ namespace PersonalSiteApi.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult SaveOrder(Guid[] ids)
         {
-            if (_context.ProjectContent.Count() < ids.Length) return BadRequest("Not all projects given.");
+            if (_context.PageContent.Count() < ids.Length) return BadRequest("Not all Pages given.");
             for (int i = 0; i < ids.Length; i++)
             {
-                var project = _context.ProjectContent.FirstOrDefault(x => x.Id == ids[i]);
-                if (project == null) continue;
-                project.Order = i;
+                var Page = _context.PageContent.FirstOrDefault(x => x.Id == ids[i]);
+                if (Page == null) continue;
+                Page.Order = i;
             }
             _context.SaveChanges();
             return Ok();
@@ -103,7 +103,7 @@ namespace PersonalSiteApi.Controllers
             if (Request.Form["id"].Count == 0) return BadRequest("No id given.");
 
             Guid id = new Guid(Request.Form["id"]!);
-            var content = _context.ProjectContent.FirstOrDefault(x => x.Id == id);
+            var content = _context.PageContent.FirstOrDefault(x => x.Id == id);
             if (content == null) return NotFound("Content not found.");
 
             var file = Request.Form.Files.First();
@@ -122,9 +122,9 @@ namespace PersonalSiteApi.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult DeleteContent(Guid id)
         {
-            var content = _context.ProjectContent.FirstOrDefault(x => x.Id == id);
+            var content = _context.PageContent.FirstOrDefault(x => x.Id == id);
             if (content == null) return NotFound("Content not found.");
-            _context.ProjectContent.Remove(content);
+            _context.PageContent.Remove(content);
             _context.SaveChanges();
             return Ok();
         }
