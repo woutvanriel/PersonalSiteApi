@@ -15,6 +15,13 @@ namespace PersonalSiteApi.Controllers
         public LanguageController(IConfiguration config, PersonalSiteContext context, IWebHostEnvironment webHostEnvironment) : base(config, context, webHostEnvironment) { }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LanguageDB>))]
+        public IActionResult GetLanguages()
+        {
+            return Ok(_context.Languages.ToList());
+        }
+
+        [HttpGet]
         [Route("{page}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LanguageDB>))]
         public IActionResult GetLanguages(int page)

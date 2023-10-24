@@ -13,6 +13,7 @@ namespace PersonalSiteApi.EntityFramework.Classes
         public ICollection<ProjectContentDB>? Content { get; set; }
         public ICollection<ProjectDetailsDB>? Details { get; set; }
         public ICollection<ImageDB>? Images { get; set; }
+        public string? Title { get; set; }
         public string? Slug { get; set; }
         public int? Order { get; set; }
     }

@@ -51,6 +51,7 @@ namespace PersonalSiteApi.Controllers
             var db = new PageDB
             {
                 Slug = Page.Slug,
+                Title = Page.Title,
             };
             _context.Pages.Add(db);
             try
@@ -77,6 +78,7 @@ namespace PersonalSiteApi.Controllers
             if (PageDb == null) return NotFound("Page not found.");
 
             if (Page.Slug != null && PageDb.Slug != Page.Slug) PageDb.Slug = Page.Slug;
+            if (Page.Title != null && PageDb.Title != Page.Title) PageDb.Title = Page.Title;
             try
             {
                 _context.SaveChanges();
@@ -104,6 +106,8 @@ namespace PersonalSiteApi.Controllers
 
         [HttpPost]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult SaveOrder(Guid[] ids)
         {
             if (_context.Pages.Count() < ids.Length) return BadRequest("Not all Pages given.");
@@ -115,6 +119,28 @@ namespace PersonalSiteApi.Controllers
             }
             _context.SaveChanges();
             return Ok();
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PageDB>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetPagesHeader()
+        {
+            return Ok(_context.Pages.Include(x => x.Details!.Where(x => x.Language!.Name == _language)).OrderBy(x => x.Order).ToList());
+        }
+
+        [HttpGet]
+        [Route("{slug}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PageDB))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetPageBySlug(string slug)
+        {
+            return Ok(
+                _context.Pages
+                    .Include(x => x.Details!.Where(x => x.Language!.Name == _language))
+                    .ThenInclude(x => x.Content!.OrderBy(x => x.Order))
+                    .FirstOrDefault(x => x.Slug == slug)
+            );
         }
 
         private PageDB? GetPageDB(Guid id)

@@ -7,8 +7,9 @@ namespace PersonalSiteApi.Models
     {
         public Guid? Id { get; set; }
         public Guid DetailId { get; set; }
-        public ProjectContentType Type { get; set; }
+        public ContentType Type { get; set; }
         public string? Content { get; set; }
+        public string? Alt { get; set; }
         public int? Order { get; set; }
     }
 }

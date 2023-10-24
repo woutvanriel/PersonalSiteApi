@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalSiteApi.EntityFramework;
 
@@ -11,9 +12,11 @@ using PersonalSiteApi.EntityFramework;
 namespace PersonalSiteApi.Migrations
 {
     [DbContext(typeof(PersonalSiteContext))]
-    partial class PersonalSiteContextModelSnapshot : ModelSnapshot
+    [Migration("20231024103418_Added-Titles")]
+    partial class AddedTitles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,10 +67,8 @@ namespace PersonalSiteApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Alt")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Content")
+                        .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("DetailsId")
@@ -142,9 +143,6 @@ namespace PersonalSiteApi.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Alt")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
                         .HasMaxLength(2147483647)

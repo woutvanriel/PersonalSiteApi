@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalSiteApi.EntityFramework;
 
@@ -11,9 +12,11 @@ using PersonalSiteApi.EntityFramework;
 namespace PersonalSiteApi.Migrations
 {
     [DbContext(typeof(PersonalSiteContext))]
-    partial class PersonalSiteContextModelSnapshot : ModelSnapshot
+    [Migration("20231024132922_Added-Alt-Content")]
+    partial class AddedAltContent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -52,7 +52,8 @@ namespace PersonalSiteApi.Controllers
                 Details = detail,
                 Type = content.Type,
                 Content = content.Content,
-                Order = detail!.Content!.Count()
+                Order = detail!.Content!.Count(),
+                Alt = content.Alt,
             };
             detail.Content!.Add(db);
             _context.SaveChanges();
@@ -69,6 +70,7 @@ namespace PersonalSiteApi.Controllers
             if (db == null) return NotFound("No Content found.");
             if (db.Type != content.Type) db.Type = content.Type;
             if (db.Content != content.Content) db.Content = content.Content;
+            if (db.Alt !=  content.Alt) db.Alt = content.Alt;
             _context.SaveChanges();
             return Ok();
         }

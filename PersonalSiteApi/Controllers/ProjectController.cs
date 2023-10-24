@@ -98,6 +98,7 @@ namespace PersonalSiteApi.Controllers
             var db = new ProjectDB
             {
                 Slug = project.Slug,
+                Title = project.Title
             };
             _context.Projects.Add(db);
             try
@@ -124,6 +125,7 @@ namespace PersonalSiteApi.Controllers
             if (projectDb == null) return NotFound("Project not found.");
 
             if (project.Slug != null && projectDb.Slug != project.Slug) projectDb.Slug = project.Slug;
+            if (project.Title != null && projectDb.Title != project.Title) projectDb.Title = project.Title;
             try
             {
                 _context.SaveChanges();
@@ -162,6 +164,20 @@ namespace PersonalSiteApi.Controllers
             }
             _context.SaveChanges();
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("{slug}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PageDB))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetProjectBySlug(string slug)
+        {
+            return Ok(
+                _context.Projects
+                    .Include(x => x.Details!.Where(x => x.Language!.Name == _language))
+                    .ThenInclude(x => x.Content!.OrderBy(x => x.Order))
+                    .FirstOrDefault(x => x.Slug == slug)
+            );
         }
 
         private ProjectDB? GetProjectDB(Guid id)
