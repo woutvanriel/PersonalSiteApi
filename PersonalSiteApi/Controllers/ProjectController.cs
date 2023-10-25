@@ -16,6 +16,7 @@ namespace PersonalSiteApi.Controllers
         public ProjectController(IConfiguration config, PersonalSiteContext context, IWebHostEnvironment webHostEnvironment) : base(config, context, webHostEnvironment) { }
 
         [HttpGet]
+        [Authorize]
         [Route("{page}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProjectDB>))]
         public IActionResult GetProjects(int page)
@@ -177,6 +178,22 @@ namespace PersonalSiteApi.Controllers
                     .Include(x => x.Details!.Where(x => x.Language!.Name == _language))
                     .ThenInclude(x => x.Content!.OrderBy(x => x.Order))
                     .FirstOrDefault(x => x.Slug == slug)
+            );
+        }
+
+        [HttpGet]
+        [Route("{page}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PageDB>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetProjectsDetails(int page)
+        {
+            return Ok(
+                _context.Projects
+                    .Include(x => x.Images)
+                    .Include(x => x.Details!.Where(x => x.Language!.Name == _language))
+                    .Skip(page * 18)
+                    .Take(18)
+                    .ToList()
             );
         }
 
