@@ -175,6 +175,7 @@ namespace PersonalSiteApi.Controllers
         {
             return Ok(
                 _context.Projects
+                    .Include(x => x.Images)
                     .Include(x => x.Details!.Where(x => x.Language!.Name == _language))
                     .ThenInclude(x => x.Content!.OrderBy(x => x.Order))
                     .FirstOrDefault(x => x.Slug == slug)
