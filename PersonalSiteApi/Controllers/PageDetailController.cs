@@ -89,9 +89,13 @@ namespace PersonalSiteApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeletePageDetail(Guid detailid)
         {
-            var db = _context.PageDetails.FirstOrDefault(x => x.Id == detailid);
-            if (db == null) return NotFound("Page detail not found.");
-            _context.PageDetails.Remove(db);
+            var details = _context.PageDetails.Include(x => x.Content).FirstOrDefault(x => x.Id == detailid);
+            if (details == null) return NotFound("Page detail not found.");
+            foreach (var content in details.Content!)
+            {
+                _context.PageContent.Remove(content);
+            }
+            _context.PageDetails.Remove(details);
             _context.SaveChanges();
             return Ok();
         }

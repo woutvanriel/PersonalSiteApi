@@ -97,9 +97,23 @@ namespace PersonalSiteApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeletePage(Guid id)
         {
-            var Page = GetPageDB(id);
-            if (Page == null) return NotFound("No Page found.");
-            _context.Pages.Remove(Page);
+            var page = _context.Pages
+                .Include(x => x.Details!)
+                .ThenInclude(x => x.Content)
+                .FirstOrDefault(x => x.Id == id);
+            if (page == null) return NotFound("No project found.");
+            if (page.Details != null)
+            {
+                foreach (var details in page.Details)
+                {
+                    foreach (var content in details.Content!)
+                    {
+                        _context.PageContent.Remove(content);
+                    }
+                    _context.PageDetails.Remove(details);
+                }
+            }
+            _context.Pages.Remove(page);
             _context.SaveChanges();
             return Ok();
         }

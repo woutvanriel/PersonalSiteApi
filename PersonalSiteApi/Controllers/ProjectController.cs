@@ -145,8 +145,30 @@ namespace PersonalSiteApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteProject(Guid id)
         {
-            var project = GetProjectDB(id);
+            var project = _context.Projects
+                .Include(x => x.Images)
+                .Include(x => x.Details!)
+                .ThenInclude(x => x.Content)
+                .FirstOrDefault(x => x.Id == id);
             if (project == null) return NotFound("No project found.");
+            if (project.Images != null)
+            {
+                foreach (var image in project.Images)
+                {
+                    _context.Images.Remove(image);
+                }
+            }
+            if (project.Details != null)
+            {
+                foreach (var details in project.Details)
+                {
+                    foreach (var content in details.Content)
+                    {
+                        _context.ProjectContent.Remove(content);
+                    }
+                    _context.ProjectDetails.Remove(details);
+                }
+            }
             _context.Projects.Remove(project);
             _context.SaveChanges();
             return Ok();
@@ -190,6 +212,7 @@ namespace PersonalSiteApi.Controllers
         {
             return Ok(
                 _context.Projects
+                    .OrderBy(x => x.Order)
                     .Include(x => x.Images)
                     .Include(x => x.Details!.Where(x => x.Language!.Name == _language))
                     .Skip(page * 18)

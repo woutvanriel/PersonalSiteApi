@@ -89,8 +89,12 @@ namespace PersonalSiteApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteProjectDetail(Guid detailid)
         {
-            var db = _context.ProjectDetails.FirstOrDefault(x => x.Id == detailid);
+            var db = _context.ProjectDetails.Include(x => x.Content).FirstOrDefault(x => x.Id == detailid);
             if (db == null) return NotFound("Project detail not found.");
+            foreach (var content in db.Content!) 
+            {
+                _context.ProjectContent.Remove(content);
+            }
             _context.ProjectDetails.Remove(db);
             _context.SaveChanges();
             return Ok();
