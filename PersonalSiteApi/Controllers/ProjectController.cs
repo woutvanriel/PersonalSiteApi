@@ -215,8 +215,8 @@ namespace PersonalSiteApi.Controllers
                     .OrderBy(x => x.Order)
                     .Include(x => x.Images)
                     .Include(x => x.Details!.Where(x => x.Language!.Name == _language))
-                    .Skip(page * 18)
-                    .Take(18)
+                    .Skip(page * 14)
+                    .Take(14)
                     .ToList()
             );
         }
